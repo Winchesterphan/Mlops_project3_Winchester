@@ -50,4 +50,4 @@ jobs:
       run: |
         pwd
         ls
-        pytest api_tests.py
+        pytest api_test.py
