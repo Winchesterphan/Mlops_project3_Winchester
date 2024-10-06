@@ -10,8 +10,8 @@ from joblib import load
 
 from pandas.core.frame import DataFrame
 import numpy as np
-from ml import model_functions
-from ml import data
+from model import model_functions
+from model import data
 import os
 
 if "DYNO" in os.environ and os.path.isdir(".dvc"):

@@ -1,76 +1,59 @@
-"""
-Api servermodule test
-"""
-import pytest
 from fastapi.testclient import TestClient
 from main import app
 
+client = TestClient(app)
 
-@pytest.fixture
-def client():
-    """
-    Get dataset
-    """
-    api_client = TestClient(app)
-    return api_client
+def test_read_root():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.content == b'Welcome to the Adult Income Prediction API'
 
+def test_predict_api_negative():
+    data = {
+            "workclass": "state_gov",
+            "education": "bachelors",
+            "marital_status": "never_married",
+            "occupation": "adm_clerical",
+            "relationship": "not_in_family",
+            "race": "white",
+            "sex": "male",
+            "native_country": "united_states",
+            "age": 39,
+            "fnlwgt": 77516,
+            "education_num": 13,
+            "capital_gain": 2174,
+            "capital_loss": 0,
+            "hours_per_week": 40
+            }
 
-def test_get(client):
-    r = client.get("/")
-    assert r.status_code == 200
-    assert r.json() == {"message": "Hello, welcome to our app!"}
+    response = client.post("/", json=data)
+    assert response.status_code == 200
+    assert response.text == 'The predicted income is: <=50k'
 
+def test_predict_api_positive():
+    data = {
+            "workclass": "state_gov",
+            "education": "bachelors",
+            "marital_status": "never_married",
+            "occupation": "adm_clerical",
+            "relationship": "not_in_family",
+            "race": "white",
+            "sex": "male",
+            "native_country": "united_states",
+            "age": 39,
+            "fnlwgt": 77516,
+            "education_num": 13,
+            "capital_gain": 10000,
+            "capital_loss": 0,
+            "hours_per_week": 40
+            }
 
-def test_get_malformed(client):
-    r = client.get("/wrong_url")
-    assert r.status_code != 200
-
-
-# def test_post_above(client):
-#     r = client.post("/", json={
-#         "age": 60,
-#         "workclass": "Private",
-#         "education": "Doctorate",
-#         "maritalStatus": "Divorced",
-#         "occupation": "Transport-moving",
-#         "relationship": "Not-in-family",
-#         "race": "White",
-#         "sex": "Male",
-#         "hoursPerWeek": 76,
-#         "nativeCountry": "United-States"
-#     })
-#     assert r.status_code == 200
-#     assert r.json() == {"prediction": "<=50K"}
-
-
-# def test_post_below(client):
-#     r = client.post("/", json={
-#         "age": 16,
-#         "workclass": "Private",
-#         "education": "HS-grad",
-#         "maritalStatus": "Never-married",
-#         "occupation": "Other-service",
-#         "relationship": "Own-child",
-#         "race": "Black",
-#         "sex": "Male",
-#         "hoursPerWeek": 40,
-#         "nativeCountry": "United-States"
-#     })
-#     assert r.status_code == 200
-#     assert r.json() == {"prediction": "<=50K"}
+    response = client.post("/", json=data)
+    assert response.status_code == 200
+    assert response.text == 'The predicted income is: >50k'
 
 
-def test_post_malformed(client):
-    r = client.post("/", json={
-        "age": 32,
-        "workclass": "Private",
-        "education": "Some-college",
-        "maritalStatus": "ERROR",
-        "occupation": "Exec-managerial",
-        "relationship": "Husband",
-        "race": "Black",
-        "sex": "Male",
-        "hoursPerWeek": 60,
-        "nativeCountry": "United-States"
-    })
-    assert r.status_code != 200
+def test_predict_api_invalid():
+    data = {}
+    response = client.post("/", json=data)
+    assert response.status_code == 422
