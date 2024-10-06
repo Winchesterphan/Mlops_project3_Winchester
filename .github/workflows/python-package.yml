@@ -25,8 +25,13 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: setup dvc
-      run: |
+    # - name: setup dvc
+    #   run: |
+    #     dvc pull
+    - name: setup DVC
+      uses: iterative/setup-dvc@v1
+    - name: DVC Pull
+      run : |
         dvc pull
     - name: Install dependencies
       run: |
