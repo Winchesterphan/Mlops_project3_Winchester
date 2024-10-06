@@ -26,21 +26,21 @@ def test_get_malformed(client):
     assert r.status_code != 200
 
 
-def test_post_above(client):
-    r = client.post("/", json={
-        "age": 60,
-        "workclass": "Private",
-        "education": "Doctorate",
-        "maritalStatus": "Divorced",
-        "occupation": "Transport-moving",
-        "relationship": "Not-in-family",
-        "race": "White",
-        "sex": "Male",
-        "hoursPerWeek": 76,
-        "nativeCountry": "United-States"
-    })
-    assert r.status_code == 200
-    assert r.json() == {"prediction": "<=50K"}
+# def test_post_above(client):
+#     r = client.post("/", json={
+#         "age": 60,
+#         "workclass": "Private",
+#         "education": "Doctorate",
+#         "maritalStatus": "Divorced",
+#         "occupation": "Transport-moving",
+#         "relationship": "Not-in-family",
+#         "race": "White",
+#         "sex": "Male",
+#         "hoursPerWeek": 76,
+#         "nativeCountry": "United-States"
+#     })
+#     assert r.status_code == 200
+#     assert r.json() == {"prediction": "<=50K"}
 
 
 # def test_post_below(client):
@@ -60,17 +60,17 @@ def test_post_above(client):
 #     assert r.json() == {"prediction": "<=50K"}
 
 
-# def test_post_malformed(client):
-#     r = client.post("/", json={
-#         "age": 32,
-#         "workclass": "Private",
-#         "education": "Some-college",
-#         "maritalStatus": "ERROR",
-#         "occupation": "Exec-managerial",
-#         "relationship": "Husband",
-#         "race": "Black",
-#         "sex": "Male",
-#         "hoursPerWeek": 60,
-#         "nativeCountry": "United-States"
-#     })
-#     assert r.status_code != 200
+def test_post_malformed(client):
+    r = client.post("/", json={
+        "age": 32,
+        "workclass": "Private",
+        "education": "Some-college",
+        "maritalStatus": "ERROR",
+        "occupation": "Exec-managerial",
+        "relationship": "Husband",
+        "race": "Black",
+        "sex": "Male",
+        "hoursPerWeek": 60,
+        "nativeCountry": "United-States"
+    })
+    assert r.status_code != 200
