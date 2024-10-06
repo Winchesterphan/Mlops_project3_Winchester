@@ -77,7 +77,7 @@ app = FastAPI()
 
 @app.get("/")
 async def get_items():
-    return {"message": "Hello, welcome to our app!"}
+    return {"message": "Welcom to the Adult Income Prediction API!"}
 
 
 @app.post("/")
